@@ -17,7 +17,7 @@ function createWindow() {
   });
 
   mainWindow.loadFile(path.join(__dirname, 'src', 'index.html'));
-  
+
   // Set Content Security Policy
   mainWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
     callback({
@@ -49,16 +49,16 @@ app.on('window-all-closed', function () {
 
 ipcMain.handle('get-sources', async (event) => {
   try {
-      console.log('Fetching sources in main process...');
-      const sources = await desktopCapturer.getSources({ types: ['window', 'screen'] });
-      console.log('Sources fetched in main process:', sources);
-      return sources.map(source => ({
-          id: source.id,
-          name: source.name,
-      }));
+    console.log('Fetching sources in main process...');
+    const sources = await desktopCapturer.getSources({ types: ['window', 'screen'] });
+    console.log('Sources fetched in main process:', sources);
+    return sources.map(source => ({
+      id: source.id,
+      name: source.name,
+    }));
   } catch (error) {
-      console.error('Error fetching sources in main process:', error);
-      throw error;
+    console.error('Error fetching sources in main process:', error);
+    throw error;
   }
 });
 
@@ -69,18 +69,18 @@ ipcMain.handle('get-cursor-position', () => {
 
 ipcMain.handle('save-temp-file', async (event, blobData) => {
   const tempPath = path.join(os.tmpdir(), `skrin_temp_${Date.now()}.webm`);
-  
+
   // Convert the array buffer to a Buffer
   const buffer = Buffer.from(new Uint8Array(blobData));
-  
+
   fs.writeFileSync(tempPath, buffer);
   return tempPath;
 });
 
-ipcMain.handle('show-save-dialog', async () => {
+ipcMain.handle('show-save-dialog', async (event, suggestedName) => {
   const { filePath } = await dialog.showSaveDialog({
       title: 'Save recording',
-      defaultPath: path.join(app.getPath('videos'), 'recording.webm'),
+      defaultPath: path.join(app.getPath('videos'), suggestedName),
       filters: [{ name: 'WebM files', extensions: ['webm'] }]
   });
   return filePath;
@@ -91,6 +91,8 @@ ipcMain.handle('save-recording', async (event, tempPath, savePath) => {
   fs.unlinkSync(tempPath);
 });
 
-ipcMain.handle('delete-temp-file', async (event, tempPath) => {
-  fs.unlinkSync(tempPath);
+ipcMain.handle('cleanup-temp-file', async (event, tempPath) => {
+  if (tempPath && fs.existsSync(tempPath)) {
+      fs.unlinkSync(tempPath);
+  }
 });

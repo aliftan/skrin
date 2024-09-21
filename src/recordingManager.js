@@ -41,9 +41,9 @@ async function startRecording() {
         mediaRecorder.ondataavailable = handleDataAvailable;
         mediaRecorder.onstop = handleRecordingStop;
 
-        recordedChunks = []; // Clear any previous recordings
+        recordedChunks = [];
         mediaRecorder.start();
-        showRecordingState(); // Move UI update here
+        showRecordingState(); 
     } catch (err) {
         console.error("Error starting recording:", err);
         alert(

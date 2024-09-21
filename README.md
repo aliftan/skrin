@@ -46,15 +46,16 @@ To use Skrin, follow these steps:
 4. Your recording will automatically play back with the zoom effect applied.
 
 ## Development Roadmap
+Bugs
+- fileManager: 
+   generateFilename not works correctly
 
 Enhance Recording Features
-
 - Add option to select specific window or application for recording
 - Implement audio source selection (system audio, microphone, or both)
 - Add recording time limit option
 
 Expand Zoom Effect Capabilities
-
 - Allow user to adjust zoom level
 - Add option to toggle zoom effect on/off
 - Implement smooth transitions for zoom effect

@@ -1,14 +1,17 @@
 import { getSources, getAudioSources, updatePreview } from "./sourceManager.js";
 import { startRecording, stopRecording } from "./recordingManager.js";
-import { showIdleState, showRecordingState, showPreviewState, resetUI } from "./uiManager.js";
-import { showSaveDialog, saveRecording, deleteTempFile } from "./fileManager.js";
+import { showSaveDialog, saveRecording } from "./fileManager.js";
+import {
+    showIdleState,
+    resetUI,
+    stopAndResetVideo
+} from './uiManager.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     const startBtn = document.getElementById("startBtn");
     const stopBtn = document.getElementById("stopBtn");
     const sourceSelect = document.getElementById("sourceSelect");
     const audioSelect = document.getElementById("audioSelect");
-    const deleteBtn = document.getElementById("deleteBtn");
     const cancelBtn = document.getElementById("cancelBtn");
     const saveBtn = document.getElementById("saveBtn");
 
@@ -26,19 +29,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     stopBtn.addEventListener("click", stopRecording);
 
-    deleteBtn.addEventListener("click", async () => {
-        await deleteTempFile(tempFilePath);
-        resetUI();
-    });
-
     cancelBtn.addEventListener("click", () => {
+        stopAndResetVideo(recordedVideo);
+        tempFilePath = null;
         resetUI();
     });
 
     saveBtn.addEventListener("click", async () => {
+        if (!tempFilePath) {
+            console.error("No recording to save");
+            return;
+        }
         const savePath = await showSaveDialog();
         if (savePath) {
+            stopAndResetVideo(recordedVideo);
             await saveRecording(tempFilePath, savePath);
+            tempFilePath = null; // Clear the temp file path after saving
             resetUI();
         }
     });

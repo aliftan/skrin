@@ -1,17 +1,24 @@
+function generateFilename() {
+    const now = new Date();
+    const timestamp = now.toISOString().replace(/[:.]/g, '-').slice(0, 19); // YYYY-MM-DDTHH-mm-ss
+    return `skrin_recording_${timestamp}.webm`;
+}
+
+async function showSaveDialog() {
+    const suggestedName = generateFilename();
+    return await window.electronAPI.showSaveDialog(suggestedName);
+}
+
 async function saveTempFile(arrayBuffer) {
     return await window.electronAPI.saveTempFile(arrayBuffer);
 }
 
-async function showSaveDialog() {
-    return await window.electronAPI.showSaveDialog();
+async function saveRecording(tempPath, savePath) {
+    await window.electronAPI.saveRecording(tempPath, savePath);
 }
 
-async function saveRecording(tempFilePath, savePath) {
-    await window.electronAPI.saveRecording(tempFilePath, savePath);
+async function cleanupTempFile(tempPath) {
+    await window.electronAPI.cleanupTempFile(tempPath);
 }
 
-async function deleteTempFile(tempFilePath) {
-    await window.electronAPI.deleteTempFile(tempFilePath);
-}
-
-export { saveTempFile, showSaveDialog, saveRecording, deleteTempFile };
+export { saveTempFile, showSaveDialog, saveRecording, cleanupTempFile };

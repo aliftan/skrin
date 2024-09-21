@@ -6,7 +6,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     stopRecording: () => ipcRenderer.send('stop-recording'),
     getCursorPosition: () => ipcRenderer.invoke('get-cursor-position'),
     saveTempFile: (arrayBuffer) => ipcRenderer.invoke('save-temp-file', arrayBuffer),
-    showSaveDialog: () => ipcRenderer.invoke('show-save-dialog'),
+    showSaveDialog: (suggestedName) => ipcRenderer.invoke('show-save-dialog', suggestedName),
     saveRecording: (tempPath, savePath) => ipcRenderer.invoke('save-recording', tempPath, savePath),
-    deleteTempFile: (tempPath) => ipcRenderer.invoke('delete-temp-file', tempPath),
+    cleanupTempFile: (tempPath) => ipcRenderer.invoke('cleanup-temp-file', tempPath),
 });
