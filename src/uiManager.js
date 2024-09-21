@@ -10,7 +10,6 @@ const idleState = document.getElementById('idleState');
 const recordingState = document.getElementById('recordingState');
 const previewState = document.getElementById('previewState');
 
-
 function showIdleState() {
     console.log('Showing idle state');
     idleState.classList.remove('d-none');
@@ -20,12 +19,6 @@ function showIdleState() {
     startBtn.classList.remove('d-none');
     stopBtn.classList.add('d-none');
     timer.classList.add('d-none');
-    
-    // Move the preview video back to the idle state
-    const idleStateVideoContainer = idleState.querySelector('.video-container');
-    if (idleStateVideoContainer && !idleStateVideoContainer.contains(previewVideo)) {
-        idleStateVideoContainer.appendChild(previewVideo);
-    }
     
     previewVideo.classList.remove('d-none');
     recordedVideo.classList.add('d-none');
@@ -42,17 +35,15 @@ function showRecordingState() {
     stopBtn.disabled = false;
     timer.classList.remove('d-none');
     
-    // Move the preview video to the recording state if it's not already there
-    const recordingStateVideoContainer = recordingState.querySelector('.video-container');
-    if (recordingStateVideoContainer && !recordingStateVideoContainer.contains(previewVideo)) {
-        recordingStateVideoContainer.appendChild(previewVideo);
-    }
+    // Move the video container to the recording state, above the timer
+    const videoContainer = document.querySelector('.video-container');
+    const timerElement = recordingState.querySelector('#timer');
+    recordingState.insertBefore(videoContainer, timerElement);
     
     previewVideo.classList.remove('d-none');
     recordedVideo.classList.add('d-none');
     startTimer();
 }
-
 
 function showPreviewState() {
     console.log('Showing preview state');

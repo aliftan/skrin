@@ -61,19 +61,20 @@ Expand Zoom Effect Capabilities
 - Implement smooth transitions for zoom effect
 
 File Management
-
 - Add ability to save recordings to user-specified locations
 - Implement a simple file browser for saved recordings
 - Add option to export recordings in different formats (MP4, GIF)
 
 User Interface Improvements
+- App icon
 
 Performance Optimizations
-
 - Optimize video encoding for smaller file sizes
 - Implement efficient handling of long recordings
 
-Advanced Effects - Add more video effects (e.g., highlight clicks, keypress visualization) - Implement chroma key (green screen) effect for webcam overlay
+Advanced Effects 
+- Add more video effects (e.g., highlight clicks, keypress visualization) 
+- Implement chroma key (green screen) effect for webcam overlay
 
 ## Contributing to Skrin
 

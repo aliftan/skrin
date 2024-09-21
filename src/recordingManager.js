@@ -33,6 +33,11 @@ async function startRecording() {
                 ...audioStream.getAudioTracks(),
             ]);
         }
+        
+        // Set the combined stream to the preview video
+        const previewVideo = document.getElementById("previewVideo");
+        previewVideo.srcObject = combinedStream;
+        previewVideo.play();
 
         mediaRecorder = new MediaRecorder(combinedStream, {
             mimeType: "video/webm; codecs=vp9",
@@ -43,7 +48,7 @@ async function startRecording() {
 
         recordedChunks = [];
         mediaRecorder.start();
-        showRecordingState(); 
+        showRecordingState();
     } catch (err) {
         console.error("Error starting recording:", err);
         alert(
@@ -61,9 +66,9 @@ function handleDataAvailable(event) {
 async function handleRecordingStop() {
     console.log("Recording stopped");
     const blob = new Blob(recordedChunks, { type: "video/webm" });
-    
+
     const arrayBuffer = await blob.arrayBuffer();
-    
+
     tempFilePath = await saveTempFile(arrayBuffer);
     window.setTempFilePath(tempFilePath);
     const recordedVideo = document.getElementById("recordedVideo");
