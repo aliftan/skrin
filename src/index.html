@@ -11,6 +11,7 @@
         #previewVideo,
         #recordedVideo {
             object-fit: contain;
+            max-height: 70vh;
         }
 
         #timer {
@@ -25,8 +26,10 @@
         <header class="pb-3 mb-4 border-bottom">
             <h2 class="card-title mb-0">Skrin - Advanced Screen Recorder</h2>
         </header>
-        <div class="card-body">
-            <div id="setupControls">
+        
+        <!-- Idle State -->
+        <div id="idleState">
+            <div class="card-body">
                 <div class="mb-3">
                     <label for="sourceSelect" class="form-label">Select Source</label>
                     <select id="sourceSelect" class="form-select">
@@ -43,19 +46,37 @@
                     <input type="checkbox" class="form-check-input" id="cursorHighlight">
                     <label class="form-check-label" for="cursorHighlight">Highlight Cursor</label>
                 </div>
+                <div class="text-center mb-3">
+                    <video id="previewVideo" class="img-fluid border" autoplay muted></video>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <button id="startBtn" class="btn btn-primary" style="width: 120px;">Start Recording</button>
+                </div>
             </div>
-            <div class="text-center mb-3">
-                <video id="previewVideo" class="img-fluid border" autoplay muted></video>
-                <video id="recordedVideo" class="img-fluid border d-none" controls></video>
+        </div>
+
+        <!-- Recording State -->
+        <div id="recordingState" class="d-none">
+            <div class="card-body">
+                <div id="timer" class="text-center mb-3">00:00:00</div>
+                <div class="d-flex justify-content-center">
+                    <button id="stopBtn" class="btn btn-danger" style="width: 120px;">Stop Recording</button>
+                </div>
             </div>
-            <div id="timer" class="text-center mb-3 d-none"></div>
-            <div id="recordingControls" class="d-flex justify-content-center mb-3">
-                <button id="startBtn" class="btn btn-primary me-2" style="width: 120px;">Start Recording</button>
-                <button id="stopBtn" class="btn btn-danger" style="width: 120px;" disabled>Stop Recording</button>
-            </div>
-            <div id="previewControls" class="d-flex justify-content-center mb-3 d-none">
-                <button id="saveBtn" class="btn btn-success me-2" style="width: 120px;">Save</button>
-                <button id="deleteBtn" class="btn btn-danger" style="width: 120px;">Delete</button>
+        </div>
+
+        <!-- Preview State -->
+        <div id="previewState" class="d-none">
+            <div class="card-body">
+                <h3 class="text-center mb-3">Preview</h3>
+                <div class="text-center mb-3">
+                    <video id="recordedVideo" class="img-fluid border" controls></video>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <button id="deleteBtn" class="btn btn-danger me-2" style="width: 120px;">Delete</button>
+                    <button id="cancelBtn" class="btn btn-secondary me-2" style="width: 120px;">Cancel</button>
+                    <button id="saveBtn" class="btn btn-success" style="width: 120px;">Save</button>
+                </div>
             </div>
         </div>
     </div>
@@ -63,6 +84,5 @@
     <!-- Bootstrap JS and Popper.js -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script type="module" src="renderer.js"></script>
-
 </body>
 </html>

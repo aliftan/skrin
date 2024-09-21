@@ -1,5 +1,5 @@
-async function saveTempFile(blob) {
-    return await window.electronAPI.saveTempFile(blob);
+async function saveTempFile(arrayBuffer) {
+    return await window.electronAPI.saveTempFile(arrayBuffer);
 }
 
 async function showSaveDialog() {

@@ -1,50 +1,53 @@
 import { getSources, getAudioSources, updatePreview } from "./sourceManager.js";
-import { startRecording, mediaRecorder, recordedChunks } from "./recordingManager.js";
-import { resetUI } from "./uiManager.js";
-import {
-  showSaveDialog,
-  saveRecording,
-  deleteTempFile,
-} from "./fileManager.js";
+import { startRecording, stopRecording } from "./recordingManager.js";
+import { showIdleState, showRecordingState, showPreviewState, resetUI } from "./uiManager.js";
+import { showSaveDialog, saveRecording, deleteTempFile } from "./fileManager.js";
 
-const startBtn = document.getElementById("startBtn");
-const stopBtn = document.getElementById("stopBtn");
-const sourceSelect = document.getElementById("sourceSelect");
-const audioSelect = document.getElementById("audioSelect");
-const saveBtn = document.getElementById("saveBtn");
-const deleteBtn = document.getElementById("deleteBtn");
+document.addEventListener('DOMContentLoaded', () => {
+    const startBtn = document.getElementById("startBtn");
+    const stopBtn = document.getElementById("stopBtn");
+    const sourceSelect = document.getElementById("sourceSelect");
+    const audioSelect = document.getElementById("audioSelect");
+    const deleteBtn = document.getElementById("deleteBtn");
+    const cancelBtn = document.getElementById("cancelBtn");
+    const saveBtn = document.getElementById("saveBtn");
 
-let tempFilePath;
+    let tempFilePath;
 
-getSources();
-getAudioSources();
+    getSources();
+    getAudioSources();
 
-sourceSelect.addEventListener("change", updatePreview);
-audioSelect.addEventListener("change", () => {
-  // You might want to add some functionality here when the audio source changes
-  console.log("Audio source changed:", audioSelect.value);
+    sourceSelect.addEventListener("change", updatePreview);
+    audioSelect.addEventListener("change", () => {
+        console.log("Audio source changed:", audioSelect.value);
+    });
+
+    startBtn.addEventListener("click", startRecording);
+
+    stopBtn.addEventListener("click", stopRecording);
+
+    deleteBtn.addEventListener("click", async () => {
+        await deleteTempFile(tempFilePath);
+        resetUI();
+    });
+
+    cancelBtn.addEventListener("click", () => {
+        resetUI();
+    });
+
+    saveBtn.addEventListener("click", async () => {
+        const savePath = await showSaveDialog();
+        if (savePath) {
+            await saveRecording(tempFilePath, savePath);
+            resetUI();
+        }
+    });
+
+    // This function will be called from recordingManager.js when recording is stopped
+    window.setTempFilePath = (path) => {
+        tempFilePath = path;
+    };
+
+    // Initialize UI
+    showIdleState();
 });
-startBtn.addEventListener("click", startRecording);
-
-stopBtn.addEventListener("click", () => {
-  if (mediaRecorder && mediaRecorder.state !== "inactive") {
-    mediaRecorder.stop();
-    mediaRecorder.stream.getTracks().forEach((track) => track.stop());
-    resetUI();
-  }
-});
-
-saveBtn.addEventListener("click", async () => {
-  const savePath = await showSaveDialog();
-  if (savePath) {
-    await saveRecording(tempFilePath, savePath);
-    resetUI();
-  }
-});
-
-deleteBtn.addEventListener("click", async () => {
-  await deleteTempFile(tempFilePath);
-  resetUI();
-});
-
-export { mediaRecorder, recordedChunks, tempFilePath };

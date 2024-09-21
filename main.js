@@ -49,14 +49,15 @@ app.on('window-all-closed', function () {
 
 ipcMain.handle('get-sources', async (event) => {
   try {
+      console.log('Fetching sources in main process...');
       const sources = await desktopCapturer.getSources({ types: ['window', 'screen'] });
-      console.log('Sources in main process:', sources);
+      console.log('Sources fetched in main process:', sources);
       return sources.map(source => ({
           id: source.id,
           name: source.name,
       }));
   } catch (error) {
-      console.error('Error in get-sources:', error);
+      console.error('Error fetching sources in main process:', error);
       throw error;
   }
 });
@@ -68,7 +69,11 @@ ipcMain.handle('get-cursor-position', () => {
 
 ipcMain.handle('save-temp-file', async (event, blobData) => {
   const tempPath = path.join(os.tmpdir(), `skrin_temp_${Date.now()}.webm`);
-  fs.writeFileSync(tempPath, Buffer.from(await blobData.arrayBuffer()));
+  
+  // Convert the array buffer to a Buffer
+  const buffer = Buffer.from(new Uint8Array(blobData));
+  
+  fs.writeFileSync(tempPath, buffer);
   return tempPath;
 });
 

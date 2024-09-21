@@ -13,6 +13,7 @@ async function getSources() {
             sourceSelect.innerHTML = sources.map(source => 
                 `<option value="${source.id}">${source.name}</option>`
             ).join('');
+            sourceSelect.value = sources[0].id; // Select the first source
             updatePreview();
         } else {
             sourceSelect.innerHTML = '<option value="">No sources available</option>';

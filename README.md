@@ -1,6 +1,6 @@
 # Skrin
 
-Skrin is an advanced screen recording application built with Electron, offering a user-friendly interface and powerful features for capturing and editing screen content.
+Skrin is an advanced screen recording application built with Electron, offering a user-friendly interface and powerful features for capturing screen content.
 
 ## Features
 
@@ -22,7 +22,7 @@ To install Skrin, follow these steps:
 
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/skrin.git
+   git clone https://github.com/aliftan/skrin.git
    ```
 2. Navigate to the project directory:
    ```
@@ -47,60 +47,32 @@ To use Skrin, follow these steps:
 
 ## Development Roadmap
 
-1. Enhance Recording Features
-   - Add option to select specific window or application for recording
-   - Implement audio source selection (system audio, microphone, or both)
-   - Add recording time limit option
+Enhance Recording Features
 
-2. Improve Video Playback
-   - Implement video trimming functionality
-   - Add speed control for playback (0.5x, 1x, 1.5x, 2x)
-   - Implement frame-by-frame navigation
+- Add option to select specific window or application for recording
+- Implement audio source selection (system audio, microphone, or both)
+- Add recording time limit option
 
-3. Expand Zoom Effect Capabilities
-   - Allow user to adjust zoom level
-   - Add option to toggle zoom effect on/off
-   - Implement smooth transitions for zoom effect
+Expand Zoom Effect Capabilities
 
-4. File Management
-   - Add ability to save recordings to user-specified locations
-   - Implement a simple file browser for saved recordings
-   - Add option to export recordings in different formats (MP4, GIF)
+- Allow user to adjust zoom level
+- Add option to toggle zoom effect on/off
+- Implement smooth transitions for zoom effect
 
-5. User Interface Improvements
-   - Create a settings page for user preferences
-   - Implement dark mode toggle
-   - Add tooltips and help text for better user guidance
+File Management
 
-6. Performance Optimizations
-   - Optimize video encoding for smaller file sizes
-   - Implement efficient handling of long recordings
+- Add ability to save recordings to user-specified locations
+- Implement a simple file browser for saved recordings
+- Add option to export recordings in different formats (MP4, GIF)
 
-7. Keyboard Shortcuts
-   - Add customizable keyboard shortcuts for main actions
+User Interface Improvements
 
-8. Annotation Features
-   - Implement basic drawing tools for video annotation
-   - Add text overlay capability
+Performance Optimizations
 
-9. Automatic Updates
-   - Implement an auto-update system for the application
+- Optimize video encoding for smaller file sizes
+- Implement efficient handling of long recordings
 
-10. Analytics and Error Reporting
-    - Add anonymous usage analytics (opt-in)
-    - Implement error logging and reporting system
-
-11. Localization
-    - Prepare the app for internationalization
-    - Implement multi-language support
-
-12. Advanced Effects
-    - Add more video effects (e.g., highlight clicks, keypress visualization)
-    - Implement chroma key (green screen) effect for webcam overlay
-
-13. Collaboration Features
-    - Add ability to generate shareable links for recordings
-    - Implement basic commenting system on shared recordings
+Advanced Effects - Add more video effects (e.g., highlight clicks, keypress visualization) - Implement chroma key (green screen) effect for webcam overlay
 
 ## Contributing to Skrin
 
