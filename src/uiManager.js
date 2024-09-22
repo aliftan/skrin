@@ -13,54 +13,51 @@ const previewState = document.getElementById('previewState');
 
 function showIdleState() {
     console.log('Showing idle state');
-    idleState.classList.remove('d-none');
-    recordingState.classList.add('d-none');
-    previewState.classList.add('d-none');
+    idleState.classList.remove('hidden');
+    recordingState.classList.add('hidden');
+    previewState.classList.add('hidden');
 
-    startBtn.classList.remove('d-none');
-    stopBtn.classList.add('d-none');
-    timer.classList.add('d-none');
+    startBtn.classList.remove('hidden');
+    stopBtn.classList.add('hidden');
+    timer.classList.add('hidden');
 
-    previewVideo.classList.remove('d-none');
-    recordedVideo.classList.add('d-none');
+    previewVideo.classList.remove('hidden');
+    recordedVideo.classList.add('hidden');
 
-    // Move the video container back to the idle state
     moveVideoContainerToIdleState();
 }
 
-
 function showRecordingState() {
     console.log('Showing recording state');
-    idleState.classList.add('d-none');
-    recordingState.classList.remove('d-none');
-    previewState.classList.add('d-none');
+    idleState.classList.add('hidden');
+    recordingState.classList.remove('hidden');
+    previewState.classList.add('hidden');
 
-    startBtn.classList.add('d-none');
-    stopBtn.classList.remove('d-none');
+    startBtn.classList.add('hidden');
+    stopBtn.classList.remove('hidden');
     stopBtn.disabled = false;
-    timer.classList.remove('d-none');
+    timer.classList.remove('hidden');
 
-    // Move the video container to the recording state if it's not there
     const videoContainer = document.querySelector('.video-container');
-    if (!recordingState.contains(videoContainer)) {
-        recordingState.insertBefore(videoContainer, timer);
+    if (videoContainer && !recordingState.contains(videoContainer)) {
+        recordingState.insertBefore(videoContainer, recordingState.firstChild);
     }
 
-    previewVideo.classList.remove('d-none');
-    recordedVideo.classList.add('d-none');
+    previewVideo.classList.remove('hidden');
+    recordedVideo.classList.add('hidden');
     startTimer();
 }
 
 function showPreviewState() {
     console.log('Showing preview state');
-    idleState.classList.add('d-none');
-    recordingState.classList.add('d-none');
-    previewState.classList.remove('d-none');
+    idleState.classList.add('hidden');
+    recordingState.classList.add('hidden');
+    previewState.classList.remove('hidden');
 
-    recordedVideo.classList.remove('d-none');
-    previewVideo.classList.add('d-none');
-    timer.classList.add('d-none');
-    stopBtn.classList.add('d-none');
+    recordedVideo.classList.remove('hidden');
+    previewVideo.classList.add('hidden');
+    timer.classList.add('hidden');
+    stopBtn.classList.add('hidden');
     stopTimer();
 }
 
@@ -88,8 +85,7 @@ function resetUI() {
     hideLoadingState();
     stopAndResetVideo(recordedVideo);
 
-    // Ensure the preview video is visible and has a source
-    previewVideo.classList.remove('d-none');
+    previewVideo.classList.remove('hidden');
     if (!previewVideo.srcObject) {
         getVideoStream(document.getElementById("sourceSelect").value)
             .then(stream => {
@@ -99,7 +95,6 @@ function resetUI() {
             .catch(error => console.error("Error resetting preview video:", error));
     }
 
-    // Ensure the video container is in the correct position
     moveVideoContainerToIdleState();
 }
 
@@ -113,11 +108,9 @@ function stopAndResetVideo(videoElement) {
 
 function moveVideoContainerToIdleState() {
     const videoContainer = document.querySelector('.video-container');
-    const idleStateBody = idleState.querySelector('.card-body');
-    if (videoContainer && idleStateBody && !idleStateBody.contains(videoContainer)) {
-        // Find the position to insert the video container (before the "Start Recording" button)
-        const startButtonContainer = idleStateBody.querySelector('.d-flex.justify-content-center');
-        idleStateBody.insertBefore(videoContainer, startButtonContainer);
+    const idleStateContent = idleState.querySelector('.space-y-4');
+    if (videoContainer && idleStateContent && !idleState.contains(videoContainer)) {
+        idleState.insertBefore(videoContainer, idleStateContent);
     }
 }
 

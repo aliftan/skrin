@@ -5,84 +5,134 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Skrin - Advanced Screen Recorder</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         #previewVideo,
         #recordedVideo {
-            object-fit: contain;
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
             max-height: 70vh;
+            border-radius: 0.5rem;
         }
-
-        #timer {
-            font-size: 1.5rem;
-            font-weight: bold;
+        .video-container {
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
         }
     </style>
 </head>
 
-<body>
-    <div class="container py-4">
-        <header class="pb-3 mb-4 border-bottom">
-            <h2 class="card-title mb-0">Skrin - Advanced Screen Recorder</h2>
+<body class="bg-gray-100">
+    <div class="container mx-auto py-4 px-4">
+        <header class="pb-3 mb-4 border-b flex justify-center">
+            <img src="../assets/logo.png" alt="Skrin Logo" class="h-12">
         </header>
 
-        <!-- Idle State -->
-        <div id="idleState">
-            <div class="card-body">
-                <div class="mb-3">
-                    <label for="sourceSelect" class="form-label">Select Source</label>
-                    <select id="sourceSelect" class="form-select">
+        <div id="idleState" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="video-container">
+                <video id="previewVideo" class="w-full h-full border rounded-lg" autoplay muted></video>
+            </div>
+
+            <div class="space-y-4">
+                <div class="relative">
+                    <label for="sourceSelect" class="block mb-2 font-medium text-gray-700">Select Source</label>
+                    <select id="sourceSelect"
+                        class="block w-full p-3 pr-10 border border-gray-300 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none">
                         <option value="">Loading sources...</option>
                     </select>
+                    <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none"
+                        style="top: 2rem;">
+                        <svg class="w-5 h-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                            fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd"
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="audioSelect" class="form-label">Select Microphone</label>
-                    <select id="audioSelect" class="form-select">
+
+                <div class="relative">
+                    <label for="audioSelect" class="block mb-2 font-medium text-gray-700">Select Microphone</label>
+                    <select id="audioSelect"
+                        class="block w-full p-3 pr-10 border border-gray-300 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none">
                         <option value="">Loading audio sources...</option>
                     </select>
+                    <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none"
+                        style="top: 2rem;">
+                        <svg class="w-5 h-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                            fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd"
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </div>
                 </div>
-                <div class="mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="cursorHighlight">
-                    <label class="form-check-label" for="cursorHighlight">Highlight Cursor</label>
+
+                <div class="hidden flex items-center">
+                    <input type="checkbox" id="cursorHighlight"
+                        class="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2 focus:ring-offset-2 cursor-pointer transition duration-200 ease-in-out">
+                    <label for="cursorHighlight"
+                        class="ml-3 text-sm font-medium text-gray-700 cursor-pointer select-none">Highlight
+                        Cursor</label>
                 </div>
-                <div class="text-center mb-3 video-container">
-                    <video id="previewVideo" class="img-fluid border" autoplay muted></video>
-                </div>
-                <div class="d-flex justify-content-center">
-                    <button id="startBtn" class="btn btn-primary">Start Recording</button>
+
+                <div class="flex justify-start">
+                    <button id="startBtn"
+                        class="bg-black hover:bg-gray-800 text-white font-bold py-2 px-6 rounded-lg text-lg">
+                        Start Recording
+                    </button>
                 </div>
             </div>
         </div>
 
-        <!-- Recording State -->
-        <div id="recordingState" class="d-none">
-            <div class="card-body">
-                <h3 class="text-center mb-3">Recording...</h3>
-            </div>
-            <!-- Show preview video -->
-            <div id="timer" class="text-center mb-3">00:00:00</div>
-            <div class="d-flex justify-content-center">
-                <button id="stopBtn" class="btn btn-danger">Stop Recording</button>
+        <div id="recordingState" class="hidden grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-4">
+                <h3 class="text-xl text-left">Recording...</h3>
+                <div id="timer" class="text-4xl font-bold text-left">00:00:01</div>
+                <div>
+                    <button id="stopBtn"
+                        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-lg text-lg flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20"
+                            fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 002 0V8a1 1 0 00-1-1zm4 0a1 1 0 00-1 1v4a1 1 0 002 0V8a1 1 0 00-1-1z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        Stop Recording
+                    </button>
+                </div>
             </div>
         </div>
 
-        <!-- Preview State -->
-        <div id="previewState" class="d-none">
-            <div class="card-body">
-                <h3 class="text-center mb-3">Preview</h3>
-                <div class="text-center mb-3 video-container">
-                    <video id="recordedVideo" class="img-fluid border" controls></video>
-                </div>
-                <div class="d-flex justify-content-center">
-                    <button id="cancelBtn" class="btn btn-secondary me-2">Cancel</button>
-                    <button id="saveBtn" class="btn btn-primary">Save</button>
+        <div id="previewState" class="hidden grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="video-container">
+                <video id="recordedVideo" class="w-full h-full border rounded-lg" controls></video>
+            </div>
+
+            <div class="space-y-4">
+                <h3 class="text-xl">Preview</h3>
+                <div class="flex space-x-4">
+                    <button id="cancelBtn"
+                        class="bg-transparent hover:bg-gray-100 text-black font-bold py-2 px-6 rounded-lg text-lg border-2 border-black w-40">
+                        Cancel
+                    </button>
+                    <button id="saveBtn"
+                        class="bg-black hover:bg-gray-800 text-white font-bold py-2 px-6 rounded-lg text-lg flex items-center justify-center w-40">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20"
+                            fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        Save
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Bootstrap JS and Popper.js -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script type="module" src="renderer.js"></script>
 </body>
 

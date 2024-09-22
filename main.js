@@ -5,15 +5,14 @@ const os = require('os');
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 800,
+    width: 1000,
+    height: 500,
+    autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
       nodeIntegration: false,
     },
-    // Removed the frame: false and titleBarStyle: 'hidden' options
-    backgroundColor: '#f8f9fa', // Match the body background color
   });
 
   mainWindow.loadFile(path.join(__dirname, 'src', 'index.html'));

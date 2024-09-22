@@ -34,13 +34,17 @@ To install Skrin, follow these steps:
    ```
 
 
+## Bugs
+
+- cursorHighlight: 
+   cursor highlight not working properly
+   cursor location is not updated correctly
+
 ## Development Roadmap
 
-Bugs
-- recordingState
-   why recorded video only 3 seconds ??
-- cursorHighlight
-   highlight not working properly, cursor location is not updated correctly
+User Interface Improvements
+- Migrate to Tailwind
+- App icon
 
 Enhance Recording Features
 - Implement webcam overlay
@@ -51,9 +55,6 @@ Enhance Recording Features
 
 File Management
 - Add option to export recordings in different formats (MP4, GIF)
-
-User Interface Improvements
-- App icon
 
 Performance Optimizations
 - Optimize video encoding for smaller file sizes

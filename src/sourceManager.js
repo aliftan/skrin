@@ -45,7 +45,6 @@ async function getAudioSources() {
     }
 }
 
-
 async function updatePreview() {
     if (previewStream) {
         previewStream.getTracks().forEach(track => track.stop());

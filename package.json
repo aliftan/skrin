@@ -1,6 +1,7 @@
 {
   "name": "skrin",
   "version": "1.0.0",
+  "description": "Advanced Screen Recorder built with Electron",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -8,10 +9,9 @@
     "package": "electron-forge package",
     "make": "electron-forge make"
   },
-  "keywords": [],
+  "keywords": ["screen recorder", "electron", "desktop app"],
   "author": "alifio",
   "license": "MIT",
-  "description": "",
   "dependencies": {
     "electron-squirrel-startup": "^1.0.1"
   },
@@ -25,5 +25,36 @@
     "@electron-forge/plugin-fuses": "^7.5.0",
     "@electron/fuses": "^1.8.0",
     "electron": "^32.1.2"
+  },
+  "config": {
+    "forge": {
+      "packagerConfig": {
+        "icon": "assets/icon"
+      },
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "skrin",
+            "iconUrl": "https://raw.githubusercontent.com/your-username/skrin/main/assets/icon.ico",
+            "setupIcon": "assets/icon.ico"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ]
+    }
   }
 }

@@ -4,12 +4,19 @@ const { FuseV1Options, FuseVersion } = require('@electron/fuses');
 module.exports = {
   packagerConfig: {
     asar: true,
+    icon: 'assets/icon' // Add this line for the icon
   },
   rebuildConfig: {},
   makers: [
     {
       name: '@electron-forge/maker-squirrel',
-      config: {},
+      config: {
+        name: 'skrin',
+        authors: 'alifio',
+        description: 'Advanced Screen Recorder built with Electron',
+        iconUrl: 'https://raw.githubusercontent.com/your-username/skrin/main/assets/icon.ico',
+        setupIcon: 'assets/icon.ico'
+      },
     },
     {
       name: '@electron-forge/maker-zip',
