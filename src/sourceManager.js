@@ -1,3 +1,5 @@
+import { createStreamWithCursorHighlight } from "./cursorHighlight.js";
+
 const sourceSelect = document.getElementById('sourceSelect');
 const audioSelect = document.getElementById('audioSelect');
 const previewVideo = document.getElementById('previewVideo');
@@ -10,7 +12,7 @@ async function getSources() {
         const sources = await window.electronAPI.getSources();
         console.log('Sources received:', sources);
         if (sources && sources.length > 0) {
-            sourceSelect.innerHTML = sources.map(source => 
+            sourceSelect.innerHTML = sources.map(source =>
                 `<option value="${source.id}">${source.name}</option>`
             ).join('');
             sourceSelect.value = sources[0].id; // Select the first source
@@ -31,7 +33,7 @@ async function getAudioSources() {
         console.log('Audio devices received:', devices);
         const audioDevices = devices.filter(device => device.kind === 'audioinput');
         if (audioDevices.length > 0) {
-            audioSelect.innerHTML = audioDevices.map(device => 
+            audioSelect.innerHTML = audioDevices.map(device =>
                 `<option value="${device.deviceId}">${device.label || `Microphone ${audioSelect.length + 1}`}</option>`
             ).join('');
         } else {
@@ -50,18 +52,28 @@ async function updatePreview() {
     }
 
     const sourceId = sourceSelect.value;
+    const cursorHighlight = document.getElementById("cursorHighlight").checked;
+
     try {
         console.log('Updating preview for source:', sourceId);
-        previewStream = await navigator.mediaDevices.getUserMedia({
-            audio: false,
-            video: {
-                mandatory: {
-                    chromeMediaSource: 'desktop',
-                    chromeMediaSourceId: sourceId
-                }
+        let videoStream = await getVideoStream(sourceId);
+
+        if (cursorHighlight) {
+            console.log("Applying cursor highlight to preview");
+            try {
+                const audioStream = new MediaStream(); // Empty audio stream for preview
+                previewStream = await createStreamWithCursorHighlight(videoStream, audioStream, true);
+            } catch (highlightError) {
+                console.error("Error applying cursor highlight:", highlightError);
+                previewStream = videoStream; // Fallback to non-highlighted stream
             }
-        });
+        } else {
+            previewStream = videoStream;
+        }
+
         previewVideo.srcObject = previewStream;
+        await previewVideo.play(); // Ensure the video starts playing
+        return previewStream; // Return the stream for use in other parts of the application
     } catch (err) {
         console.error("Error updating preview:", err);
     }
@@ -81,7 +93,7 @@ async function getVideoStream(sourceId) {
 
 async function getAudioStream(audioId) {
     return navigator.mediaDevices.getUserMedia({
-        audio: {deviceId: audioId ? {exact: audioId} : undefined},
+        audio: { deviceId: audioId ? { exact: audioId } : undefined },
         video: false
     });
 }

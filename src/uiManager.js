@@ -1,4 +1,5 @@
 import { startTimer, stopTimer } from './timerManager.js';
+import { getVideoStream } from './sourceManager.js';
 
 const startBtn = document.getElementById('startBtn');
 const stopBtn = document.getElementById('stopBtn');
@@ -19,10 +20,14 @@ function showIdleState() {
     startBtn.classList.remove('d-none');
     stopBtn.classList.add('d-none');
     timer.classList.add('d-none');
-    
+
     previewVideo.classList.remove('d-none');
     recordedVideo.classList.add('d-none');
+
+    // Move the video container back to the idle state
+    moveVideoContainerToIdleState();
 }
+
 
 function showRecordingState() {
     console.log('Showing recording state');
@@ -34,12 +39,13 @@ function showRecordingState() {
     stopBtn.classList.remove('d-none');
     stopBtn.disabled = false;
     timer.classList.remove('d-none');
-    
-    // Move the video container to the recording state, above the timer
+
+    // Move the video container to the recording state if it's not there
     const videoContainer = document.querySelector('.video-container');
-    const timerElement = recordingState.querySelector('#timer');
-    recordingState.insertBefore(videoContainer, timerElement);
-    
+    if (!recordingState.contains(videoContainer)) {
+        recordingState.insertBefore(videoContainer, timer);
+    }
+
     previewVideo.classList.remove('d-none');
     recordedVideo.classList.add('d-none');
     startTimer();
@@ -81,6 +87,20 @@ function resetUI() {
     timer.textContent = '00:00:00';
     hideLoadingState();
     stopAndResetVideo(recordedVideo);
+
+    // Ensure the preview video is visible and has a source
+    previewVideo.classList.remove('d-none');
+    if (!previewVideo.srcObject) {
+        getVideoStream(document.getElementById("sourceSelect").value)
+            .then(stream => {
+                previewVideo.srcObject = stream;
+                previewVideo.play();
+            })
+            .catch(error => console.error("Error resetting preview video:", error));
+    }
+
+    // Ensure the video container is in the correct position
+    moveVideoContainerToIdleState();
 }
 
 function stopAndResetVideo(videoElement) {
@@ -91,12 +111,22 @@ function stopAndResetVideo(videoElement) {
     }
 }
 
-export { 
-    showIdleState, 
-    showRecordingState, 
-    showPreviewState, 
-    resetUI, 
-    showLoadingState, 
+function moveVideoContainerToIdleState() {
+    const videoContainer = document.querySelector('.video-container');
+    const idleStateBody = idleState.querySelector('.card-body');
+    if (videoContainer && idleStateBody && !idleStateBody.contains(videoContainer)) {
+        // Find the position to insert the video container (before the "Start Recording" button)
+        const startButtonContainer = idleStateBody.querySelector('.d-flex.justify-content-center');
+        idleStateBody.insertBefore(videoContainer, startButtonContainer);
+    }
+}
+
+export {
+    showIdleState,
+    showRecordingState,
+    showPreviewState,
+    resetUI,
+    showLoadingState,
     hideLoadingState,
     stopAndResetVideo
 };

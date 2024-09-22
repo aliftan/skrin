@@ -6,6 +6,7 @@ import {
     resetUI,
     stopAndResetVideo
 } from './uiManager.js';
+import { createStreamWithCursorHighlight, stopCursorHighlight } from './cursorHighlight.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     const startBtn = document.getElementById("startBtn");
@@ -14,23 +15,40 @@ document.addEventListener('DOMContentLoaded', () => {
     const audioSelect = document.getElementById("audioSelect");
     const cancelBtn = document.getElementById("cancelBtn");
     const saveBtn = document.getElementById("saveBtn");
+    const cursorHighlightCheckbox = document.getElementById("cursorHighlight");
 
     let tempFilePath;
+    let videoStream;
+    let audioStream;
 
     getSources();
     getAudioSources();
 
-    sourceSelect.addEventListener("change", updatePreview);
-    audioSelect.addEventListener("change", () => {
-        console.log("Audio source changed:", audioSelect.value);
+    sourceSelect.addEventListener("change", async () => {
+        videoStream = await updatePreview();
     });
 
-    startBtn.addEventListener("click", startRecording);
+    audioSelect.addEventListener("change", async () => {
+        console.log("Audio source changed:", audioSelect.value);
+        audioStream = await getAudioStream(audioSelect.value);
+    });
+
+    cursorHighlightCheckbox.addEventListener("change", async (event) => {
+        console.log("Cursor highlight toggled:", event.target.checked);
+        if (event.target.checked && videoStream && audioStream) {
+            await createStreamWithCursorHighlight(videoStream, audioStream, true);
+        } else {
+            stopCursorHighlight();
+        } 
+        await updatePreview();
+    });
+
+    startBtn.addEventListener("click", () => startRecording(cursorHighlightCheckbox.checked));
 
     stopBtn.addEventListener("click", stopRecording);
 
     cancelBtn.addEventListener("click", () => {
-        stopAndResetVideo(recordedVideo);
+        stopAndResetVideo(document.getElementById("recordedVideo"));
         tempFilePath = null;
         resetUI();
     });
@@ -42,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         const savePath = await showSaveDialog();
         if (savePath) {
-            stopAndResetVideo(recordedVideo);
+            stopAndResetVideo(document.getElementById("recordedVideo"));
             await saveRecording(tempFilePath, savePath);
             tempFilePath = null; // Clear the temp file path after saving
             resetUI();

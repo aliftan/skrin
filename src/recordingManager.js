@@ -1,14 +1,15 @@
 import {
     showRecordingState,
-    showPreviewState,
-    resetUI
+    showPreviewState
 } from "./uiManager.js";
 import { getVideoStream, getAudioStream } from "./sourceManager.js";
 import { saveTempFile } from "./fileManager.js";
+import { createStreamWithCursorHighlight, stopCursorHighlight } from "./cursorHighlight.js";
 
 let mediaRecorder;
 let recordedChunks = [];
 let tempFilePath;
+let mimeType;
 
 async function startRecording() {
     const sourceId = document.getElementById("sourceSelect").value;
@@ -21,26 +22,28 @@ async function startRecording() {
         let combinedStream;
 
         if (cursorHighlight) {
-            // Implement cursor highlight logic here
-            // For now, we'll just combine video and audio
-            combinedStream = new MediaStream([
-                ...videoStream.getVideoTracks(),
-                ...audioStream.getAudioTracks(),
-            ]);
+            console.log("Applying cursor highlight to recording");
+            combinedStream = await createStreamWithCursorHighlight(videoStream, audioStream, true);
         } else {
             combinedStream = new MediaStream([
                 ...videoStream.getVideoTracks(),
                 ...audioStream.getAudioTracks(),
             ]);
         }
-        
-        // Set the combined stream to the preview video
-        const previewVideo = document.getElementById("previewVideo");
-        previewVideo.srcObject = combinedStream;
-        previewVideo.play();
+
+        // Check for MP4 support
+        if (MediaRecorder.isTypeSupported('video/mp4')) {
+            mimeType = 'video/mp4';
+        } else if (MediaRecorder.isTypeSupported('video/webm; codecs=vp9')) {
+            mimeType = 'video/webm; codecs=vp9';
+        } else {
+            mimeType = 'video/webm';
+        }
+
+        console.log(`Using MIME type: ${mimeType}`);
 
         mediaRecorder = new MediaRecorder(combinedStream, {
-            mimeType: "video/webm; codecs=vp9",
+            mimeType: mimeType
         });
 
         mediaRecorder.ondataavailable = handleDataAvailable;
@@ -65,7 +68,7 @@ function handleDataAvailable(event) {
 
 async function handleRecordingStop() {
     console.log("Recording stopped");
-    const blob = new Blob(recordedChunks, { type: "video/webm" });
+    const blob = new Blob(recordedChunks, { type: mimeType });
 
     const arrayBuffer = await blob.arrayBuffer();
 
@@ -80,6 +83,7 @@ function stopRecording() {
     if (mediaRecorder && mediaRecorder.state !== "inactive") {
         mediaRecorder.stop();
         mediaRecorder.stream.getTracks().forEach((track) => track.stop());
+        stopCursorHighlight();
     }
 }
 

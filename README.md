@@ -47,22 +47,19 @@ To use Skrin, follow these steps:
 
 ## Development Roadmap
 Bugs
-- fileManager: 
-   generateFilename not works correctly
+- recordingState
+   why recorded video only 3 seconds ??
+- cursorHighlight
+   highlight not working properly, cursor location is not updated correctly
 
 Enhance Recording Features
-- Add option to select specific window or application for recording
-- Implement audio source selection (system audio, microphone, or both)
-- Add recording time limit option
-
-Expand Zoom Effect Capabilities
-- Allow user to adjust zoom level
-- Add option to toggle zoom effect on/off
-- Implement smooth transitions for zoom effect
+- Implement webcam overlay
+   custom position: top right, top left, bottom left, bottom right
+- Able to choose cursor highlighter color
+- Magnify effect config
+   Implement smooth transitions for zoom effect
 
 File Management
-- Add ability to save recordings to user-specified locations
-- Implement a simple file browser for saved recordings
 - Add option to export recordings in different formats (MP4, GIF)
 
 User Interface Improvements
@@ -74,16 +71,3 @@ Performance Optimizations
 
 Advanced Effects 
 - Add more video effects (e.g., highlight clicks, keypress visualization) 
-- Implement chroma key (green screen) effect for webcam overlay
-
-## Contributing to Skrin
-
-To contribute to Skrin, follow these steps:
-
-1. Fork this repository.
-2. Create a branch: `git checkout -b <branch_name>`.
-3. Make your changes and commit them: `git commit -m '<commit_message>'`
-4. Push to the original branch: `git push origin <project_name>/<location>`
-5. Create the pull request.
-
-Alternatively, see the GitHub documentation on [creating a pull request](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request).
