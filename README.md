@@ -33,19 +33,9 @@ To install Skrin, follow these steps:
    npm install
    ```
 
-## Using Skrin
-
-To use Skrin, follow these steps:
-
-1. Start the application:
-   ```
-   npm start
-   ```
-2. Click the "Start Recording" button to begin capturing your screen.
-3. Click the "Stop Recording" button when you're done.
-4. Your recording will automatically play back with the zoom effect applied.
 
 ## Development Roadmap
+
 Bugs
 - recordingState
    why recorded video only 3 seconds ??
@@ -71,3 +61,15 @@ Performance Optimizations
 
 Advanced Effects 
 - Add more video effects (e.g., highlight clicks, keypress visualization) 
+
+## Using Skrin
+
+To use Skrin, follow these steps:
+
+1. Start the application:
+   ```
+   npm start
+   ```
+2. Click the "Start Recording" button to begin capturing your screen.
+3. Click the "Stop Recording" button when you're done.
+4. Your recording will automatically play back with the zoom effect applied.
